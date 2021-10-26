@@ -18,14 +18,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '''
 
-import cv2
-import glob
-import tkinter 
-
-import numpy as np
-
-from playsound import playsound
-from pylsl import StreamInlet, resolve_stream
+from utils import *
 
 def intro_page(duration=15000):
     m = tkinter.Tk()
@@ -34,18 +27,3 @@ def intro_page(duration=15000):
     tkinter.Label(m, text="Experiment Begin", fg="red", font=('Helvetica 28')).pack(pady=150)
     m.after(duration, lambda:m.destroy())
     m.mainloop()
-
-def play_vid(vid_path, vid_id=0, duration=5000):
-    m = tkinter.Tk()
-    m.title("random page")
-    m.geometry('720x420')
-    tkinter.Label(m, text="Video "+str(vid_id), fg="blue", font=('Helvetica 28')).pack(pady=150)
-    m.after(duration, lambda:m.destroy())
-    m.mainloop()
-    playsound(vid_path, block=False)
-
-def len_vid(path):
-    data = cv2.VideoCapture(path)
-    frames = data.get(cv2.CAP_PROP_FRAME_COUNT)
-    fps = int(data.get(cv2.CAP_PROP_FPS))
-    return frames/fps
