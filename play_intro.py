@@ -20,10 +20,4 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 from utils import *
 
-def intro_page(duration=15000):
-    m = tkinter.Tk()
-    m.title("random page")
-    m.geometry('720x420')
-    tkinter.Label(m, text="Experiment Begin", fg="red", font=('Helvetica 28')).pack(pady=150)
-    m.after(duration, lambda:m.destroy())
-    m.mainloop()
+intro_page(duration=500)

@@ -24,7 +24,8 @@ from utils import *
 
 def main():
 
-    vid_path = '/home/vdelv/Downloads/DREAMER_VID/*.m4v'
+    #vid_path = '/home/vdelv/Downloads/DREAMER_VID/*.m4v'
+    vid_path = "C:/Users/victo/Desktop/vid/*.mp4"
     path_save = 'save_dir'
     vid_list = glob.glob(vid_path)
 
@@ -59,7 +60,8 @@ def main():
             else :
                 print('Video '+str(vid_id+1))
                 vid_duration = len_vid(vid_list[vid_id])
-                os.system('python play_intro.py '+vid_list[vid_id]+' '+ str(vid_id+1)+ ' &')
+                os.system('python play_vid.py '+vid_list[vid_id]+' '+ str(vid_id+1)+ ' &')
+                vid_id += 1
             t_b = timestamp
             
         # Register Signal
@@ -74,7 +76,7 @@ def main():
             if vid_id == 0:
                 vid_tot += 'intro'
             else :
-                vid_tot += vid_list.split('/')[-1]
+                vid_tot += vid_list[vid_id-1].split('/')[-1]
             vid_tot += '\n'
 
         i += 1
@@ -90,3 +92,6 @@ def main():
     vid_file.write(vid_tot)
     vid_file.close()
     print('Files Saved in '+path_save+'/..'+date)
+
+if __name__ == '__main__':
+    main()

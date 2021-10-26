@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import cv2
 import glob
 import tkinter 
+import datetime
 
 import numpy as np
 
@@ -42,7 +43,7 @@ def play_vid(vid_path, vid_id=0, duration=5000):
     tkinter.Label(m, text="Video "+str(vid_id), fg="blue", font=('Helvetica 28')).pack(pady=150)
     m.after(duration, lambda:m.destroy())
     m.mainloop()
-    playsound(vid_path, block=False)
+    playsound(vid_path, block=True)
 
 def len_vid(path):
     data = cv2.VideoCapture(path)
