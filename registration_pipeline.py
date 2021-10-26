@@ -25,7 +25,7 @@ from utils import *
 def main():
 
     #vid_path = '/home/vdelv/Downloads/DREAMER_VID/*.m4v'
-    vid_path = "C:/Users/victo/Desktop/vid/*.mp4"
+    vid_path = "C:/Users/victo/Desktop/session_4/*.m4v"
     path_save = 'save_dir'
     vid_list = glob.glob(vid_path)
 
@@ -33,6 +33,7 @@ def main():
     vid_id = -1
 
     finished = False
+
 
     save_update = 5
     stream_timestamp = 1000
@@ -44,6 +45,7 @@ def main():
     i = 0
     t_b = 0
     vid_duration = 0
+
     while not finished:
         
         sample, timestamp = inlet.pull_sample()
