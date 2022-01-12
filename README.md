@@ -31,4 +31,4 @@ Full package installation: `pip install -r requirement.txt`
 
 If you are interested in our work, don't hesitate to contact us (victor.delvigne[at]umons.ac.be). 
 
-Wish you the best in your research projects!
+Wish you the best in your research projects! :bowtie:
