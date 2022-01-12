@@ -18,6 +18,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '''
 
+import os
 import cv2
 import glob
 import tkinter 
@@ -25,6 +26,7 @@ import datetime
 
 import numpy as np
 
+from scipy import signal
 from playsound import playsound
 from pylsl import StreamInlet, resolve_stream
 
@@ -50,3 +52,77 @@ def len_vid(path):
     frames = data.get(cv2.CAP_PROP_FRAME_COUNT)
     fps = int(data.get(cv2.CAP_PROP_FPS))
     return frames/fps
+
+def gen_coeff(cuttoff, fs=50, filtype='lowpass', order=4):
+    if filtype == 'lowpass':
+        b,a = signal.butter(order, cuttoff[0]/(fs/2), filtype)
+    elif filtype == 'bandpass':
+        b,a = signal.butter(order, [cuttoff[0]/(fs/2), cuttoff[1]/(fs/2)], filtype)
+    elif filtype == 'highpass':
+        b,a = signal.butter(order, cuttoff[0]/(fs/2), filtype)
+    return b, a 
+
+def apply_filter(sig, b, a):
+    sig = min_max_scale(sig)
+    sig -= sig.mean()
+    return signal.filtfilt(b, a, sig)
+
+def min_max_scale(x):
+    x -= x.min()
+    x = x/x.max()
+    return x
+
+def signal_segmentation(sig, wind_len=4, overlapping=0.2, fs=50):
+    win = wind_len*fs
+    x = []
+    end = False
+    i = 0
+    while not end:
+        if i+win < len(sig):
+            x.append(sig[i:i+win])
+            i += win
+        else: 
+            end = True
+    return np.asarray(x)
+
+def compute_entropy(sig):
+    return 0.5*np.log10(2*np.pi*np.exp(1)*np.var(sig))
+
+def sig_vid(path):
+    X = []
+    Y = []
+    n_session = len(os.listdir(os.path.join(path)))//2
+    for i in range(1, n_session+1):
+        sig_path = glob.glob(os.path.join(path, 'session_'+str(i)+'_sig*'))[0]
+        log_path = glob.glob(os.path.join(path, 'session_'+str(i)+'_log*'))[0]
+
+        log = np.loadtxt(log_path)
+        sig = np.loadtxt(sig_path)
+
+        for vid in np.unique(log[:, -1]):
+            if vid != 0 : #if intro
+                
+                x = sig[log[:, -1]==vid]
+                y = log[log[:, -1]==vid]
+
+                X.append(np.asarray(x))
+                Y.append(np.asarray(y))
+    return X, Y
+
+def gen_feat(signals, label, filters):
+    Features = np.zeros((923, 8, 4))
+    Label = np.zeros((923))
+    i = 0
+    for vid in range(len(signals)):
+        s = signals[vid][:, 1:9] #we keep only the EEG channels 
+        l = label[vid][:, -1].astype(int)
+        for e in range(s.shape[-1]): #for each electrodes
+            for f in range(len(filters)): 
+                b, a = filters[f] 
+                x = apply_filter(s[:, e], b, a)
+                x = signal_segmentation(x)
+                for t in range(x.shape[0]):
+                    Features[i+t, e, f] = compute_entropy(x[t])
+                    Label[i+t] = l[0]
+        i += t
+    return Features, Label
