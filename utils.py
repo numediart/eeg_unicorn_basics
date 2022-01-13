@@ -26,6 +26,7 @@ import datetime
 
 import numpy as np
 
+from tqdm import tqdm
 from scipy import signal
 from playsound import playsound
 from pylsl import StreamInlet, resolve_stream
@@ -80,7 +81,7 @@ def signal_segmentation(sig, wind_len=4, overlapping=0.2, fs=50):
     while not end:
         if i+win < len(sig):
             x.append(sig[i:i+win])
-            i += win
+            i += int(win*(1-overlapping))
         else: 
             end = True
     return np.asarray(x)
@@ -110,8 +111,8 @@ def sig_vid(path):
     return X, Y
 
 def gen_feat(signals, label, filters):
-    Features = np.zeros((923, 8, 4))
-    Label = np.zeros((923))
+    Features = np.zeros((1153, 8, 4))
+    Label = np.zeros((1153))
     i = 0
     for vid in range(len(signals)):
         s = signals[vid][:, 1:9] #we keep only the EEG channels 
@@ -126,3 +127,14 @@ def gen_feat(signals, label, filters):
                     Label[i+t] = l[0]
         i += t
     return Features, Label
+
+def gen_val_arousal(vid_info, film_id):
+    y = []
+    for f in film_id:
+        y.append([ float(vid_info[f-1][2]), float(vid_info[f-1][4])])
+    y = np.asarray(y)
+    tmp = np.vstack(
+        ((y[:, 0] > np.median(y[:, 0])).astype(int), 
+        ((y[:, 1] > np.median(y[:, 1])).astype(int))))
+    y = np.transpose(tmp)
+    return y
