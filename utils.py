@@ -138,3 +138,18 @@ def gen_val_arousal(vid_info, film_id):
         ((y[:, 1] > np.median(y[:, 1])).astype(int))))
     y = np.transpose(tmp)
     return y
+
+def gen_smiley(emotion, dim=32, dir_path='save_dir'):
+    img = np.zeros((dim, dim))
+    smileys = np.load(os.path.join(dir_path, 'em_smileys.npy'), allow_pickle=True).all()
+
+    if dim != 32:
+        print("The smileys have been computed for 32x32 display.")
+        assert(False)
+
+    id_em = smileys[emotion]
+
+    for coord in id_em:
+        img[coord[0], coord[1]] = 1
+
+    return img
