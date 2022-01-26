@@ -19,13 +19,15 @@ To simulate and manage the data pipe, the python code works with [OpenVibe](http
 
 ### Python
 
-[Playsound](https://github.com/TaylorSMarks/playsound)1.3.0
+[Playsound](https://github.com/TaylorSMarks/playsound)
 
 OpenCV
 
+Scikit-learn
+
 [pylsl](https://github.com/chkothe/pylsl) 1.13.1
 
-Full package installation: `pip install -r requirement.txt`
+Full package installation with pip: `pip install -r requirement.txt` or anaconda `conda env create -f conda_environment.yml`
 
 
 ## Remarks
