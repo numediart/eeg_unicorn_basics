@@ -26,10 +26,15 @@ import datetime
 
 import numpy as np
 
+import matplotlib.pyplot as plt 
+
 from tqdm import tqdm
 from scipy import signal
 from playsound import playsound
 from pylsl import StreamInlet, resolve_stream
+from sklearn.model_selection import train_test_split
+from sklearn import tree
+from joblib import dump, load
 
 def intro_page(duration=15000):
     m = tkinter.Tk()

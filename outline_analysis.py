@@ -23,14 +23,17 @@ from utils import *
 path_save = 'save_dir/'
 sampling_frequency = 50
 
+# Data Preprocessing + Feature Extraction
+
 if not os.path.exists(os.path.join(path_save, 'feat_mat.npy')):
-    #Filter Parameters
+    # Filter Parameters Definition
     filters = [] 
     freq_lim = np.asarray([
         [4, 4], #delta
         [4, 8], #theta 
         [8, 13],#alpha 
         [13, 13]]) #beta
+
     filt_type = ['lowpass', 'bandpass', 'bandpass', 'highpass']
     for f in range(freq_lim.shape[0]):
         b, a =gen_coeff(freq_lim[f], filtype=filt_type[f])
@@ -39,38 +42,58 @@ if not os.path.exists(os.path.join(path_save, 'feat_mat.npy')):
     x, y = sig_vid(path_save)
     x, y = gen_feat(x, y, filters)
 
-    np.save('save_dir/feat_mat', x)
-    np.save('save_dir/video_label', y)
+    np.save(os.path.join(path_save, 'feat_mat'), x)
+    np.save(os.path.join(path_save, 'video_label'), y)
 
     info = np.load('info_vid.npy', allow_pickle=True)
     y = gen_val_arousal(info, y.astype(int) )
-    np.save('save_dir/label', y)
+    np.save(os.path.join(path_save, 'label'), y)
+
 else:
     x = np.load(os.path.join(path_save, 'feat_mat.npy'))
     y = np.load(os.path.join(path_save, 'label.npy'))
 
 x = x.reshape(x.shape[0], -1)
 
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn import tree
+# Valence and Arousal Classifier 
+plot_trees = False
 
+# Approach Evaluation
 val_score = []
 aro_score = []
-for i in tqdm(range(20)):
+for i in tqdm(range(100)):
     x_train, x_test, y_train, y_test = train_test_split(
         x, y, test_size=0.2)
     # Valence 
     #clf = RandomForestClassifier()
-    clf = tree.DecisionTreeClassifier()
-    clf.fit(x_train, y_train[:, 0])
-    val_score.append(clf.score(x_test, y_test[:, 0]))
+    clf_valence = tree.DecisionTreeClassifier(max_depth=4)
+    clf_valence.fit(x_train, y_train[:, 0])
+    val_score.append(clf_valence.score(x_test, y_test[:, 0]))
     # Arousal
     #clf = RandomForestClassifier()
-    clf = tree.DecisionTreeClassifier()
-    clf.fit(x_train, y_train[:, 1])
-    aro_score.append(clf.score(x_test, y_test[:, 1]))
-print("Cross Validation Accuracy for Valence Estimation: %.2f - Arousal Estimation: %.2f"%(np.mean(val_score), np.mean(aro_score)))
-tree.plot_tree(clf, filled=True, rounded=True, fontsize=8)
-import matplotlib.pyplot as plt 
-plt.show()
+    clf_arousal = tree.DecisionTreeClassifier(max_depth=4)
+    clf_arousal.fit(x_train, y_train[:, 1])
+    aro_score.append(clf_arousal.score(x_test, y_test[:, 1]))
+print("Cross Validation Accuracy for Valence Estimation: %.2f/%.1f - Arousal Estimation: %.2f/%.1f"%(100*np.mean(val_score),
+    100*np.std(val_score), 100*np.mean(aro_score), 100*np.std(aro_score)))
+
+if plot_trees:
+    tree.plot_tree(clf_valence, filled=True, rounded=True, fontsize=8)
+    plt.suptitle('Decision Tree Valence')
+    plt.show()
+
+    tree.plot_tree(clf_arousal, filled=True, rounded=True, fontsize=8)
+    plt.suptitle('Decision Tree Arousal')
+    plt.show()
+
+
+clf_valence = tree.DecisionTreeClassifier(max_depth=4)
+clf_valence.fit(x, y[:, 0])
+
+clf_arousal = tree.DecisionTreeClassifier(max_depth=4)
+clf_arousal.fit(x, y[:, 1])
+
+dump(clf_arousal, os.path.join(path_save, 'clf_arousal'))
+dump(clf_valence, os.path.join(path_save, 'clf_valence'))
+
+print('The classifiers have been saved in '+path_save)
