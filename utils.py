@@ -69,8 +69,8 @@ def gen_coeff(cuttoff, fs=50, filtype='lowpass', order=4):
     return b, a 
 
 def apply_filter(sig, b, a):
-    sig = min_max_scale(sig)
     sig -= sig.mean()
+    sig = min_max_scale(sig)
     return signal.filtfilt(b, a, sig)
 
 def min_max_scale(x):
