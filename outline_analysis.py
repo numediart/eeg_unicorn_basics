@@ -45,10 +45,9 @@ if not os.path.exists(os.path.join(path_save, 'feat_mat.npy')):
     np.save(os.path.join(path_save, 'feat_mat'), x)
     np.save(os.path.join(path_save, 'video_label'), y)
 
-    info = np.load('info_vid.npy', allow_pickle=True)
+    info = np.load(os.path.join(path_save, 'info_vid.npy'), allow_pickle=True)
     y = gen_val_arousal(info, y.astype(int) )
     np.save(os.path.join(path_save, 'label'), y)
-
 else:
     x = np.load(os.path.join(path_save, 'feat_mat.npy'))
     y = np.load(os.path.join(path_save, 'label.npy'))

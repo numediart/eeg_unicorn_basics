@@ -158,3 +158,10 @@ def gen_smiley(emotion, dim=32, dir_path='save_dir'):
         img[coord[0], coord[1]] = 1
 
     return img
+
+def comp_feat_short(sig, filters):
+    f_vector = []
+    for f in range(len(filters)):
+        b, a = filters[f]
+        f_vector.append(compute_entropy(apply_filter(sig, b, a)))
+    return np.asarray(f_vector)

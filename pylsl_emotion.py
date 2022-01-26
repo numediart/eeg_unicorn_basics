@@ -54,26 +54,11 @@ for f in range(freq_lim.shape[0]):
 
 sig = []
 
-begin = False
-
-t_elapsed = []
-
-def comp_feat(sig, filters):
-    f_vector = []
-    for f in range(len(filters)):
-        b, a = filters[f]
-        f_vector.append(compute_entropy(apply_filter(sig, b, a)))
-    return np.asarray(f_vector)
-
-
 clf_arousal = load('save_dir/clf_arousal')
 clf_valence = load('save_dir/clf_valence')
 
 while not aborted:
     sample, timestamp = inlet.pull_sample()
-    if not begin:
-        print('Begin Experiment \n\n')
-        begin = True
 
     if i%down_sampling_ratio==0:
         x = np.asarray([sample[i] for i in range(n_electrodes)])
@@ -86,7 +71,7 @@ while not aborted:
         t = time.time()
 
 
-        feat = np.asarray([comp_feat(sig[:, e], filters) for e in range(n_electrodes)]).reshape(1, -1)
+        feat = np.asarray([comp_feat_short(sig[:, e], filters) for e in range(n_electrodes)]).reshape(1, -1)
         arousal = clf_arousal.predict(feat)
         valence = clf_valence.predict(feat)
         print(arousal, valence)
@@ -106,3 +91,6 @@ while not aborted:
         break
 
     i+= 1
+
+
+# 0 correspond to low and 1 to high valence/arousal
