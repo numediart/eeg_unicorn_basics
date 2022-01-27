@@ -17,24 +17,24 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '''
-
+import time
 import msvcrt
+
 import numpy as np
 import matplotlib.pyplot as plt
-
-import time
 
 from utils import *
 from pylsl import StreamInlet, resolve_stream
 
 duration = 4
-sampling_frequency = 50
+sampling_frequency = 128
 down_sampling_ratio = 5
 n_electrodes = 8
 
-
 streams = resolve_stream()
 inlet = StreamInlet(streams[0])
+
+path_img = 'util_img'
 
 aborted = False
 i = 0
@@ -57,6 +57,7 @@ sig = []
 clf_arousal = load('save_dir/clf_arousal')
 clf_valence = load('save_dir/clf_valence')
 
+first = True
 while not aborted:
     sample, timestamp = inlet.pull_sample()
 
@@ -65,32 +66,19 @@ while not aborted:
         sig.append(x)
         j += 1 
 
-    if j > duration*sampling_frequency:
+    if j > duration*sampling_frequency/down_sampling_ratio:
         sig = np.asarray(sig)
         feat = []
         t = time.time()
 
-
         feat = np.asarray([comp_feat_short(sig[:, e], filters) for e in range(n_electrodes)]).reshape(1, -1)
         arousal = clf_arousal.predict(feat)
         valence = clf_valence.predict(feat)
-        print(arousal, valence)
-
+        if first:# TO CHECK HERE#
+            first = False
+            old_val, old_ar = gen_figures(path_img, valence, arousal, valence, arousal)
+        else:
+            old_val, old_ar = gen_figures(path_img, valence, arousal, old_val, old_ar)
         sig = []
         j = 0
-        f = open('tmp_', 'r')
-        txt = f.read()
-        t_elapsed = time.time()-t
-        txt += "\n" + str(t_elapsed)
-        f = open('tmp_', 'w')
-        f.write(txt)
-        f.close()
-
-    if i%100000==99999:
-        print(np.mean(t_elapsed), '\t\t' ,np.std(t_elapsed))
-        break
-
     i+= 1
-
-
-# 0 correspond to low and 1 to high valence/arousal
