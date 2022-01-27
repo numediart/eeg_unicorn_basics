@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 import os
 import cv2
 import glob
+import shutil
 import tkinter 
 import datetime
 
@@ -165,3 +166,43 @@ def comp_feat_short(sig, filters):
         b, a = filters[f]
         f_vector.append(compute_entropy(apply_filter(sig, b, a)))
     return np.asarray(f_vector)
+
+def custom_mean(x, y, weight):
+    return (x+weight*y)/(weight+1)
+
+def gen_figures(path, valence, arousal, old_val, old_ars):
+    #figure infors
+    fig = plt.figure(figsize=(6.25, 6.25))
+    r = np.linspace(-1, 1, 1000)
+    fontdict = {'color':  'darkred',
+        'weight': 'light',
+        'size': 8.5,
+        }
+
+    plt.plot(r, -np.sqrt(1-r**2), c='black')
+    plt.plot(r, np.sqrt(1 -r**2), c='black')
+    plt.arrow(0, -1.15, 0, 2.25, width=0.0085, color='black')
+    plt.arrow(-1.15, 0, 2.25, 0, width=0.0085, color='black')
+    plt.text(1.02, 0.075, 'Valence', fontdict)
+    plt.text(0.075,1.075, 'Arousal', fontdict)
+    ax = plt.gca()
+    ax.set_xlim([-1.175, 1.175])
+    ax.set_ylim([-1.175, 1.175])
+    plt.grid(visible=True)
+
+    ax.scatter(valence-0.5, arousal-0.5)
+    plt.savefig(os.path.join(path, 'current_graph'))
+    old_val = valence
+    old_ar  = arousal
+
+    if valence > 0.5:
+        if arousal > 0.5:
+            shutil.copy(os.path.join(path, 'ha_hv.png'), os.path.join(path, 'current_smiley.png'))
+        else:
+            shutil.copy(os.path.join(path, 'la_hv.png'), os.path.join(path, 'current_smiley.png'))
+    elif arousal > 0.5:
+        shutil.copy(os.path.join(path, 'ha_lv.png'), os.path.join(path, 'current_smiley.png'))
+    else: 
+        shutil.copy(os.path.join(path, 'la_lv.png'), os.path.join(path, 'current_smiley.png'))
+    ax.clear()
+    return valence, arousal
