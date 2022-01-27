@@ -78,17 +78,7 @@ while not aborted:
 
         sig = []
         j = 0
-        f = open('tmp_', 'r')
-        txt = f.read()
-        t_elapsed = time.time()-t
-        txt += "\n" + str(t_elapsed)
-        f = open('tmp_', 'w')
-        f.write(txt)
-        f.close()
-
-    if i%100000==99999:
-        print(np.mean(t_elapsed), '\t\t' ,np.std(t_elapsed))
-        break
+        i = 0
 
     i+= 1
 
