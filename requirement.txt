@@ -1,44 +1,31 @@
-asttokens==2.0.5
 backcall==0.2.0
-black==21.12b0
-certifi==2021.10.8
-click==8.0.3
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
 cycler==0.10.0
-decorator==5.1.1
-executing==0.8.2
-getch==1.0
-ipython==8.0.1
-jedi==0.18.1
-joblib==1.1.0
+decorator==5.1.0
+ipython==7.28.0
+jedi==0.18.0
+joblib @ file:///tmp/build/80754af9/joblib_1601912903842/work
 kiwisolver==1.3.2
 matplotlib==3.4.3
 matplotlib-inline==0.1.3
-mypy-extensions==0.4.3
-numpy==1.21.2
-opencv-python==4.5.4.58
-parso==0.8.3
-pathspec==0.9.0
-pexpect==4.8.0
+numpy @ file:///D:/bld/numpy_1634853135042/work
+parso==0.8.2
 pickleshare==0.7.5
 Pillow==8.3.2
-platformdirs==2.4.1
 playsound==1.3.0
-prompt-toolkit==3.0.24
-ptyprocess==0.7.0
-pure-eval==0.2.1
-pycrypto==2.6.1
-Pygments==2.11.2
-pylsl==1.13.1
+prompt-toolkit==3.0.20
+Pygments==2.10.0
+pylsl==1.15.0
 pyparsing==2.4.7
+PyQt6==6.2.0
+PyQt6-Qt6==6.2.0
+PyQt6-sip==13.1.0
+pyqtgraph==0.12.2
 python-dateutil==2.8.2
-scikit-learn==1.0.2
-scipy==1.7.3
+scikit-learn @ file:///C:/ci/scikit-learn_1598377018496/work
+scipy @ file:///C:/bld/scipy_1637806857964/work
 six==1.16.0
-stack-data==0.1.4
-threadpoolctl==3.0.0
-tk==0.1.0
-tomli==1.2.3
-tqdm==4.62.3
-traitlets==5.1.1
-typing_extensions==4.0.1
+threadpoolctl @ file:///tmp/tmp9twdgx9k/threadpoolctl-2.1.0-py3-none-any.whl
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1632160078689/work
+traitlets==5.1.0
 wcwidth==0.2.5
