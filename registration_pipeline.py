@@ -24,8 +24,7 @@ from utils import *
 
 def main():
 
-    #vid_path = '/home/vdelv/Downloads/DREAMER_VID/*.m4v'
-    vid_path = "C:/Users/victo/Desktop/session_4/*.m4v"
+    vid_path = "example_vids/*.m4v"
     path_save = 'save_dir'
     vid_list = glob.glob(vid_path)
 
