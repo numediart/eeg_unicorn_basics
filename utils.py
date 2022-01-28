@@ -206,3 +206,12 @@ def gen_figures(path, valence, arousal, old_val, old_ars):
         shutil.copy(os.path.join(path, 'la_lv.png'), os.path.join(path, 'current_smiley.png'))
     ax.clear()
     return valence, arousal
+
+'''
+Converting numpy raw files to mne raw see https://mne.tools/stable/generated/mne.io.RawArray.html
+
+import mne 
+def convert_mne(sig, f_s=50, c_names=['Fz', 'Cz', 'P3', 'Pz', 'P4', 'PO7', 'Oz', 'PO8']):
+    info = mne.create_info(ch_names=e_name, sfreq=f_s, ch_types='eeg')
+    return mne.io.RawArray(sig, info)
+'''
