@@ -17,7 +17,12 @@ To simulate and manage the data pipe, the python code works with [OpenVibe](http
 
 ## BCI for Emotion Assessments
 
-blabla blab a BCI can be designed and described in the following blog post. The considered s
+blabla blab a BCI can be designed and described in the following blog post. The considered steps are :
+1. a 
+2. b
+3. c 
+4. d 
+5. e
 
 
 Katsigiannis and Ramzan in [DREAMER](https://ieeexplore-ieee-org.ressources-electroniques.univ-lille.fr/document/7887697). This last consisting to an EEG signals recorded during watching of video promoting specific emotion. [registration_pipeline](registration_pipeline.py) propose the whole pipeline for the dataset registration.
