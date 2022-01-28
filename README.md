@@ -17,16 +17,13 @@ To simulate and manage the data pipe, the python code works with [OpenVibe](http
 
 ## BCI for Emotion Assessments
 
-blabla blab a BCI can be designed and described in the following blog post. The considered steps are :
-1. a 
-2. b
-3. c 
-4. d 
-5. e
+A BCI application aiming to assess emotional state during videos is also provided. The proposed application is inspired by tge works of Katsigiannis and Ramzan in [DREAMER](https://ieeexplore-ieee-org.ressources-electroniques.univ-lille.fr/document/7887697). The goal of the pipeline is to design a tools assessing emotion in real-time, the considered steps in the design of this tools are:
 
-
-Katsigiannis and Ramzan in [DREAMER](https://ieeexplore-ieee-org.ressources-electroniques.univ-lille.fr/document/7887697). This last consisting to an EEG signals recorded during watching of video promoting specific emotion. [registration_pipeline](registration_pipeline.py) propose the whole pipeline for the dataset registration.
-
+1. Design of a benchmark promoting several emotional state;
+2. Recording of EEG signals with the designed benchmark;
+3. Analysis of EEG signals and creation of a box classifying them;
+4. Integration of the box in a real-time recording pipeline with a feedback in function of the according to the emotional state;
+5. Let's Play! :wink:
 
 
 ## Installation and Dependencies
